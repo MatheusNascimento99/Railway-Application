@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
 using Microsoft.IdentityModel.Tokens;
 using ProjTask.Repositores;
 using ProjTask.UserDTOs;
@@ -46,7 +45,7 @@ namespace ProjTask.Controllers
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(5),
+                expires: DateTime.UtcNow.AddDays(30),
                 signingCredentials: creds
             );
 

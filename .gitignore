@@ -1,0 +1,76 @@
+# Build results
+bin/
+obj/
+out/
+*.dll
+*.exe
+*.app
+*.pdb
+*.cache
+*.log
+
+# User-specific files
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
+
+# VS Code
+.vscode/
+
+# Visual Studio
+*.csproj.user
+*.dbmdl
+*.vspx
+*.pidb
+*.svclog
+
+# ASP.NET Secrets
+secrets.json
+
+# Environment config
+.env
+*.env.*
+
+# NuGet
+*.nupkg
+packages/
+.nuget/
+
+# Entity Framework
+Migrations/
+
+# Logs
+logs/
+*.log
+
+# Publish artifacts
+publish/
+wwwroot/dist/
+wwwroot/node_modules/
+
+# Others
+_ReSharper*/
+*.DotSettings.user
+.idea/
+*.vs/
+
+# JetBrains Rider
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node (if using npm/yarn inside project)
+node_modules/
+
+# SQLite (if using local db)
+*.db
+*.sqlite
+*.sqlite3
+
+# JWT tokens or local secrets (just in case)
+*.jwt
+*.token
+*.key

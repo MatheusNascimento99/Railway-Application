@@ -90,7 +90,7 @@ app.UseSwaggerUI(c =>
     c.ConfigObject.AdditionalItems["filter"] = true;
 });
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

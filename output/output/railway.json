@@ -1,0 +1,11 @@
+{
+  "build": {
+    "builder": "dotnet",
+    "buildCommand": "dotnet publish -c Release -o output",
+    "runCommand": "dotnet YourApiProject.dll",
+    "outputDir": "output"
+  },
+  "deploy": {
+    "startCommand": "dotnet YourApiProject.dll --urls http://0.0.0.0:${PORT}"
+  }
+}

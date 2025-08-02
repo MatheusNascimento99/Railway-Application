@@ -11,9 +11,17 @@ DotNetEnv.Env.Load(); // Carrega variáveis do arquivo .env
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configuração da Connection String
+// opcional: console logging para diagnosticar carregamento
+builder.Logging.AddConsole();
+
+// Configuração da Connection String com validação
 var connectionString = Environment.GetEnvironmentVariable("CONNECTIONSTRINGS__POSTGRESQL")
-                      ?? builder.Configuration.GetConnectionString("PostgreSQL");
+                      ?? builder.Configuration.GetConnectionString("PostgreSQL")
+                      ?? throw new InvalidOperationException("Connection string 'PostgreSQL' não está configurada. Verifique o .env ou appsettings.");
+
+// Registro dos repositórios (agora safe: connectionString não pode ser nulo)
+builder.Services.AddScoped<IUserRepository>(_ => new UserRepository(connectionString));
+builder.Services.AddScoped<ITaskRepository>(_ => new TaskRepository(connectionString));
 
 // Configuração dos serviços
 builder.Services.AddControllers();
@@ -24,7 +32,6 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "API de Tarefas", Version = "v1" });
 
-    // Configuração do esquema de segurança JWT no Swagger
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
@@ -50,14 +57,10 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// Registro dos repositórios
-builder.Services.AddScoped<IUserRepository>(_ => new UserRepository(connectionString));
-builder.Services.AddScoped<ITaskRepository>(_ => new TaskRepository(connectionString));
-
 // Configuração da autenticação JWT
 var jwtKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY")
              ?? builder.Configuration["Jwt:Key"]
-             ?? "MinhaChaveSecretaMuitoForteCom32Chars!";
+             ?? throw new InvalidOperationException("JWT secret key não configurada.");
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -82,11 +85,7 @@ app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "API de Tarefas v1");
-
-    // Rota padrão para a UI do Swagger
     c.RoutePrefix = string.Empty;
-
-    // Configuração para exibir o botão de Authorize
     c.ConfigObject.AdditionalItems["filter"] = true;
 });
 
